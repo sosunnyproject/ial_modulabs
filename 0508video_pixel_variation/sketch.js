@@ -1,5 +1,4 @@
-// black and white rectangle
-// smaller videoSize
+// color, shape variation
 var video;
 var vScale = 12;
 
@@ -7,29 +6,35 @@ function setup() {
   createCanvas(320, 240);
   pixelDensity(1);
   video = createCapture(VIDEO);
-  video.size(width/vScale, height/vScale)
-  // ㄴ original video size.
-  // ㄴ divide by vScale: makes less lagging.
+  video.size(width / vScale, height / vScale)
 }
 
 function draw() {
   background(51);
-  video.loadPixels();
-  loadPixels();
-  for(var y = 0; y < video.height; y++) {
+  video.loadPixels(); // pixels of video
+  loadPixels(); // pixels of canvas
+  for (var y = 0; y < video.height; y++) {
     for (var x = 0; x < video.width; x++) {
-      var index = (x + y * video.width) * 4;
-
-      var r = video.pixels[index+0];
-      var g = video.pixels[index+1];
-      var b = video.pixels[index+2];
+      // var index = (x + y * video.width) * 4;
+      var index = ((video.width - x + 1) + y * video.width) * 4; // reverse mirror
+      var r = video.pixels[index + 0];
+      var g = video.pixels[index + 1];
+      var b = video.pixels[index + 2];
 
       var bright = (r + g + b) / 3;
+      var w = map(bright, 0, 225, 0, vScale);
 
       fill(bright);
+      noStroke();
+      fill(map(bright, 0, 225, 50, 100), map(sin(bright), -1, 1, 0, 200), map(tan(bright), -1, 1, 100, 200));
 
-      rect(x*vScale, y*vScale, vScale, vScale);
-
+      rectMode(CENTER);
+      rect(x * vScale, y * vScale, w, w);
+      // if ( 5 < w && w < 7 ) {
+      //   rect(x*vScale, y*vScale, w, w);
+      // } else if ( w >= 7) {
+      //   ellipse(x*vScale, y*vScale, w, w);
+      // }
     }
   }
 }
