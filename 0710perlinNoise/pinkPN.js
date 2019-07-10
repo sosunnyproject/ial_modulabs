@@ -1,24 +1,41 @@
 let xInterval = 10;
 let yoff = 0.0;
-let sound, amplitude, size, speed;
+let sound, amp, size, speed;
 let mic;
 let micLevel;
+
+
+function preload() {
+  song = loadSound('loversPHS.mp3');
+}
+
 
 function setup() {
   createCanvas(710, 400);
   noFill(0);
   background(0);
-  frameRate(30);
-  mic = new p5.AudioIn();
-  mic.start();
+  // frameRate(30);
+  // mic = new p5.AudioIn();
+  // mic.start();
   // getAudioContext().resume();
-  micLevel = 0.9;
+  song.play();
+  amp = new p5.Amplitude();
+  // micLevel = 0.9;
   size = 1;
   speed =1;
 }
 
+function mouseClicked() {
+  if (sound.isPlaying() ){
+      sound.stop();
+    } else {
+      sound.play();
+    }
+}
+
 function draw() {
-  let level = mic.getLevel();
+  // let level = mic.getLevel();
+  let level = amp.getLevel();
   let speed = map(level, 0, 1, 1, 10);
   size = map(level, 0, 1, 2, 0.1);
   background(0, 9);
